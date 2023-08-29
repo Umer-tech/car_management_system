@@ -14,6 +14,8 @@ router.post("/", async (req, res) => {
       req.body.password &&
       req.body.address
     ) {
+      const exists = User.findOne({ where: { email: req.body.email } });
+      if (exists) res.status(400).send("User alredy exists!!!");
       bcrypt.hash(req.body.password, 10, async function (err, hash) {
         const user = await User.create({
           name: req.body.name,

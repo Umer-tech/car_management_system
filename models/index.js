@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const dbConfig = require("../config/db-config");
-const Sequelize = require("Sequelize");
+const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(
   dbConfig.DATABASE,
@@ -28,5 +28,6 @@ db.sequelize = sequelize;
 db.models = {};
 db.models.User = require("./users")(sequelize, Sequelize.DataTypes);
 db.models.Car = require("./cars")(sequelize, Sequelize.DataTypes);
+db.models.Rental = require("./rental")(sequelize, Sequelize.DataTypes);
 
 module.exports = db;
