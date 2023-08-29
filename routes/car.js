@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const {
   models: { Car },
 } = require("../models");
@@ -17,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   try {
     if (
       req.body.make &&
@@ -43,7 +45,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", [auth, admin], async (req, res) => {
   try {
     const id = req.params.id;
     if (
@@ -79,7 +81,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [auth, admin], async (req, res) => {
   try {
     const id = req.params.id;
     const car = await Car.destroy({
@@ -89,13 +91,13 @@ router.delete("/:id", async (req, res) => {
     });
     console.log(car);
     if (car) {
-      res.status(200).send("Car Deleted!!!");
+      return res.status(200).send("Car Deleted!!!");
     } else {
-      res.status(404).send("Not found!!!");
+      return res.status(404).send("Not found!!!");
     }
   } catch (ex) {
     console.log("ERRROOOO!!!!! ", ex.message);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 });
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const jwtConfig = require("../config/jwt-config");
 // const jwtConfig = require("../config/jwt-config");
 const {
   models: { User },
@@ -16,18 +17,21 @@ router.post("/", async (req, res) => {
         const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
           //Creating JWT
-          const token = jwt.sign({ _id: user.user_id }, "abc");
-          res.status(200).send(token);
-        } else res.status(401).send("Invalid Credentials!!!");
+          const token = jwt.sign(
+            { id: user.user_id, isAdmin: user.isAdmin },
+            jwtConfig.jwtSecret
+          );
+          return res.status(200).send(token);
+        } else return res.status(401).send("Invalid Credentials!!!");
       } else {
-        res.status(401).send("Invalid Credentials!!!");
+        return res.status(401).send("Invalid Credentials!!!");
       }
     } else {
-      res.status(401).send("Fill all feilds!!");
+      return res.status(401).send("Fill all feilds!!");
     }
   } catch (ex) {
     console.log("ERRROOOO!!!!! ", ex.message);
-    res.status(500).send("Something went wrong!!!");
+    return res.status(500).send("Something went wrong!!!");
   }
 });
 module.exports = router;
