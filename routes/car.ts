@@ -1,12 +1,15 @@
-const express = require("express");
+import express from "express";
+import auth from "../middleware/auth";
+import admin from "../middleware/admin";
+import { Request, Response, NextFunction } from "express";
+
 const router = express.Router();
-const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
+
 const {
   models: { Car },
 } = require("../models");
 
-router.get("/", async (req, res) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const cars = await Car.findAll();
     if (cars) {
@@ -14,12 +17,12 @@ router.get("/", async (req, res) => {
     } else {
       res.status(404).send("Not found!!");
     }
-  } catch (ex) {
+  } catch (ex: any) {
     res.status(500).send(ex.message);
   }
 });
 
-router.post("/", [auth, admin], async (req, res) => {
+router.post("/", [auth, admin], async (req: Request, res: Response) => {
   try {
     if (
       req.body.make &&
@@ -39,13 +42,13 @@ router.post("/", [auth, admin], async (req, res) => {
     } else {
       res.status(404).send("Fill all feilds!!!");
     }
-  } catch (ex) {
+  } catch (ex: any) {
     console.log("ERRROOOO!!!!! ", ex.message);
     res.status(500).send("Internal Server Error");
   }
 });
 
-router.put("/:id", [auth, admin], async (req, res) => {
+router.put("/:id", [auth, admin], async (req: Request , res: Response) => {
   try {
     const id = req.params.id;
     if (
@@ -75,13 +78,13 @@ router.put("/:id", [auth, admin], async (req, res) => {
     } else {
       res.status(404).send("Fill all feilds!!!");
     }
-  } catch (ex) {
+  } catch (ex: any) {
     console.log("ERRROOOO!!!!! ", ex.message);
     res.status(500).send("Internal Server Error");
   }
 });
 
-router.delete("/:id", [auth, admin], async (req, res) => {
+router.delete("/:id", [auth, admin], async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const car = await Car.destroy({
@@ -95,9 +98,9 @@ router.delete("/:id", [auth, admin], async (req, res) => {
     } else {
       return res.status(404).send("Not found!!!");
     }
-  } catch (ex) {
+  } catch (ex: any) {
     console.log("ERRROOOO!!!!! ", ex.message);
     return res.status(500).send("Internal Server Error");
   }
 });
-module.exports = router;
+export default router;

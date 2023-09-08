@@ -1,17 +1,15 @@
-const express = require("express");
+import express from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { JWT_PRIVATE_KEY } from "../utils/config";
+import { User } from "../models";
+
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const jwtConfig = require("../config/jwt-config");
-// const jwtConfig = require("../config/jwt-config");
-const {
-  models: { User },
-} = require("../models");
 
 router.post("/", async (req, res) => {
   try {
     if (req.body.email && req.body.password) {
-      const user = await User.findOne({ where: { email: req.body.email } });
+      const user: any = await User.findOne({ where: { email: req.body.email } });
 
       if (user) {
         const match = await bcrypt.compare(req.body.password, user.password);
@@ -19,7 +17,7 @@ router.post("/", async (req, res) => {
           //Creating JWT
           const token = jwt.sign(
             { id: user.user_id, isAdmin: user.isAdmin },
-            jwtConfig.jwtSecret
+            JWT_PRIVATE_KEY
           );
           return res.status(200).send(token);
         } else return res.status(401).send("Invalid Credentials!!!");
@@ -29,9 +27,9 @@ router.post("/", async (req, res) => {
     } else {
       return res.status(401).send("Fill all feilds!!");
     }
-  } catch (ex) {
+  } catch (ex: any) {
     console.log("ERRROOOO!!!!! ", ex.message);
     return res.status(500).send("Something went wrong!!!");
   }
 });
-module.exports = router;
+export default router;

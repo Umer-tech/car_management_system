@@ -1,6 +1,20 @@
-module.exports = (sequelize, DataTypes) => {
-  const Car = sequelize.define(
-    "car",
+import { Sequelize, Model, DataTypes } from 'sequelize';
+
+class Car extends Model {
+
+  public car_id!: number; 
+  public make!: string; 
+  public model!: number; 
+  public license_plate_number!: string;
+  public color!: string;
+
+  static associate(models: any) {
+    this.hasMany(models.Car);
+  }
+}
+
+export function initCarModel(sequelize: Sequelize): void {
+  Car.init(
     {
       car_id: {
         type: DataTypes.INTEGER,
@@ -27,10 +41,11 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      freezeTableName: true,
-      timestamps: false,
+      sequelize,
+      modelName: 'Car', 
+      tableName: 'cars',
+
     }
   );
+}
 
-  return Car;
-};
