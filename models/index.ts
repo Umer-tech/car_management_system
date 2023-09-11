@@ -1,8 +1,9 @@
-import {DB_DATABASE, DB_HOST, DB_PASSWORD, DB_USER} from "../utils/config"
+import {DB_DATABASE, DB_HOST, DB_PASSWORD, DB_USER} from "../utils/config";
 import { Sequelize } from 'sequelize';
 import { initUserModel } from './users';
 import { initCarModel } from './cars';
 import { initRentalModel } from './rental';
+
 
 const sequelize = new Sequelize(
   DB_DATABASE,

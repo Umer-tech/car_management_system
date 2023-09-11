@@ -13,7 +13,7 @@ class Rental extends Model {
 export function initRentalModel(sequelize: Sequelize): void {
   Rental.init(
     {
-      car_id: {
+      rental_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,

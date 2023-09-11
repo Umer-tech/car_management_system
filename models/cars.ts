@@ -31,12 +31,12 @@ export function initCarModel(sequelize: Sequelize): void {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      license_plate: {
+      license_plate_number: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       color: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

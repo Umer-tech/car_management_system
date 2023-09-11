@@ -2,12 +2,10 @@ import express from "express";
 import auth from "../middleware/auth";
 import admin from "../middleware/admin";
 import { Request, Response, NextFunction } from "express";
+import {Car} from "../models"
 
 const router = express.Router();
 
-const {
-  models: { Car },
-} = require("../models");
 
 router.get("/", async (req: Request, res: Response) => {
   try {
@@ -27,13 +25,13 @@ router.post("/", [auth, admin], async (req: Request, res: Response) => {
     if (
       req.body.make &&
       req.body.model &&
-      req.body.license_plate &&
+      req.body.license_plate_number &&
       req.body.color
     ) {
-      const car = Car.create({
+      const car =await Car.create({
         make: req.body.make,
         model: req.body.model,
-        license_plate: req.body.license_plate,
+        license_plate_number: req.body.license_plate_number,
         color: req.body.color,
       });
       if (car) {
@@ -54,14 +52,14 @@ router.put("/:id", [auth, admin], async (req: Request , res: Response) => {
     if (
       req.body.make &&
       req.body.model &&
-      req.body.license_plate &&
+      req.body.license_plate_number &&
       req.body.color
-    ) {
+    ){
       const car = await Car.update(
         {
           make: req.body.make,
           model: req.body.model,
-          license_plate: req.body.license_plate,
+          license_plate_number: req.body.license_plate_number,
           color: req.body.color,
         },
         {
@@ -92,7 +90,6 @@ router.delete("/:id", [auth, admin], async (req: Request, res: Response) => {
         car_id: id,
       },
     });
-    console.log(car);
     if (car) {
       return res.status(200).send("Car Deleted!!!");
     } else {

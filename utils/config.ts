@@ -1,12 +1,15 @@
+import env from 'dotenv';
 type DatabaseDialect = "mysql" | "postgres" | "sqlite" | "mariadb" | "mssql";
 
+env.config();
+
 interface EnvironmentVariables {
-    PORT: string;
+    PORT: number;
     DB_HOST: string;
     DB_USER: string;
     DB_PASSWORD: string;
     DB_DATABASE: string;
-    SALT: string;
+    SALT: number;
     JWT_PRIVATE_KEY: string;
     DB_DIALECT: DatabaseDialect;
   }
